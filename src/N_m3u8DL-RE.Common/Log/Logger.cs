@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+using Spectre.Console;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,6 +8,8 @@ public static partial class Logger
 {
     [GeneratedRegex("{}")]
     private static partial Regex VarsRepRegex();
+
+    public static event Action<string>? OnLog;
 
     /// <summary>
     /// 日志级别，默认为INFO
@@ -105,19 +107,19 @@ public static partial class Logger
                 Console.WriteLine(subWrite);
             }
 
+            var plain = write.RemoveMarkup() + subWrite.RemoveMarkup();
+            OnLog?.Invoke(plain);
+
             if (!IsWriteFile || !File.Exists(LogFilePath)) return;
             
-            var plain = write.RemoveMarkup() + subWrite.RemoveMarkup();
             try
             {
-                // 进入写入
                 LogWriteLock.EnterWriteLock();
                 using StreamWriter sw = new StreamWriter(LogFilePath, append: true, Encoding.UTF8);
                 sw.WriteLine(plain);
             }
             finally
             {
-                // 释放占用
                 LogWriteLock.ExitWriteLock();
             }
         }

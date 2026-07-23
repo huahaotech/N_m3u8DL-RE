@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32505.426
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "N_m3u8DL-RE.Parser", "N_m3u8DL-RE.Parser\N_m3u8DL-RE.Parser.csproj", "{0DA02925-AF3A-4598-AF01-91AE5539FCA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N_m3u8DL-RE.Tests", "N_m3u8DL-RE.Tests\N_m3u8DL-RE.Tests.csproj", "{CF51B8FF-E4EF-49D6-8595-AFAFD96D9253}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "N_m3u8DL-RE.GUI", "N_m3u8DL-RE.GUI\N_m3u8DL-RE.GUI.csproj", "{5B3F2D1A-7E8F-4A2B-9D4E-8C1A3F5D7E9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CF51B8FF-E4EF-49D6-8595-AFAFD96D9253}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF51B8FF-E4EF-49D6-8595-AFAFD96D9253}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF51B8FF-E4EF-49D6-8595-AFAFD96D9253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B3F2D1A-7E8F-4A2B-9D4E-8C1A3F5D7E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3F2D1A-7E8F-4A2B-9D4E-8C1A3F5D7E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3F2D1A-7E8F-4A2B-9D4E-8C1A3F5D7E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3F2D1A-7E8F-4A2B-9D4E-8C1A3F5D7E9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

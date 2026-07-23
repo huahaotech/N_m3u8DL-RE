@@ -1,0 +1,105 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:N_m3u8DL_RE.GUI.ViewModels"
+        mc:Ignorable="d"
+        x:Class="N_m3u8DL_RE.GUI.MainWindow"
+        Title="{Binding Title}"
+        Width="900"
+        Height="700">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="Transparent" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="{Binding LUrl}" FontWeight="Bold" />
+                    <TextBox Text="{Binding Url}" Watermark="{Binding LUrlWatermark}" />
+                    
+                    <Button Content="{Binding LStartDownload}" Command="{Binding StartDownloadCommand}" IsEnabled="{Binding IsNotDownloading}" />
+                    
+                    <Separator Margin="0 5" />
+                    
+                    <TextBlock Text="{Binding LSaveSettings}" FontWeight="Bold" />
+                    <StackPanel Spacing="5">
+                        <TextBox Text="{Binding SaveDir}" Watermark="{Binding LSaveDir}" />
+                        <Button Content="{Binding LBrowse}" Command="{Binding BrowseSaveDirCommand}" />
+                    </StackPanel>
+                    <TextBox Text="{Binding SaveName}" Watermark="{Binding LSaveName}" />
+                    
+                    <Separator Margin="0 5" />
+                    
+                    <TextBlock Text="{Binding LDownloadSettings}" FontWeight="Bold" />
+                    <StackPanel Spacing="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding LThreadCount}" Width="80" VerticalAlignment="Center" />
+                            <TextBox Text="{Binding ThreadCount}" Width="80" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding LRetryCount}" Width="80" VerticalAlignment="Center" />
+                            <TextBox Text="{Binding DownloadRetryCount}" Width="80" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding LTimeout}" Width="80" VerticalAlignment="Center" />
+                            <TextBox Text="{Binding HttpRequestTimeout}" Width="80" />
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <Separator Margin="0 5" />
+                    
+                    <TextBlock Text="{Binding LOptions}" FontWeight="Bold" />
+                    <StackPanel Spacing="5">
+                        <CheckBox Content="{Binding LAutoSelect}" IsChecked="{Binding AutoSelect}" />
+                        <CheckBox Content="{Binding LSkipMerge}" IsChecked="{Binding SkipMerge}" />
+                        <CheckBox Content="{Binding LDelAfterDone}" IsChecked="{Binding DelAfterDone}" />
+                        <CheckBox Content="{Binding LSubOnly}" IsChecked="{Binding SubOnly}" />
+                        <CheckBox Content="{Binding LDisableUpdateCheck}" IsChecked="{Binding DisableUpdateCheck}" />
+                    </StackPanel>
+                    
+                    <Separator Margin="0 5" />
+                    
+                    <TextBlock Text="{Binding LMaxSpeed}" FontWeight="Bold" />
+                    <TextBox Text="{Binding MaxSpeed}" Watermark="{Binding LMaxSpeedWatermark}" />
+                    
+                    <Separator Margin="0 5" />
+                    
+                    <TextBlock Text="{Binding LHeaders}" FontWeight="Bold" />
+                    <TextBox Text="{Binding Headers}" Watermark="{Binding LHeadersWatermark}" AcceptsReturn="True" Height="80" />
+
+                    <Separator Margin="0 5" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Button Content="中文" Command="{Binding ChangeLanguageCommand}" CommandParameter="zh-CN" />
+                        <Button Content="English" Command="{Binding ChangeLanguageCommand}" CommandParameter="en-US" />
+                        <Button Content="繁體中文" Command="{Binding ChangeLanguageCommand}" CommandParameter="zh-TW" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Column="1" Background="Transparent" Padding="10">
+            <StackPanel Spacing="10">
+                <ProgressBar Value="{Binding Progress}" Maximum="100" Height="20" />
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding StatusText}" />
+                    <TextBlock Grid.Column="1" Text="{Binding SpeedText}" HorizontalAlignment="Right" />
+                    <TextBlock Grid.Column="2" Text="{Binding SizeText}" HorizontalAlignment="Right" />
+                    <TextBlock Grid.Column="3" Text="{Binding TimeText}" HorizontalAlignment="Right" />
+                </Grid>
+                
+                <TextBox Text="{Binding LogText}" AcceptsReturn="True" IsReadOnly="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
