@@ -97,6 +97,8 @@ jobs:
 
       - run: dotnet publish src/N_m3u8DL-RE -r win-x64 -c Release -o artifact-x64
       - run: dotnet publish src/N_m3u8DL-RE -r win-arm64 -c Release -o artifact-arm64
+      - run: dotnet publish src/N_m3u8DL-RE.GUI -r win-x64 -c Release -o artifact-gui-x64
+      - run: dotnet publish src/N_m3u8DL-RE.GUI -r win-arm64 -c Release -o artifact-gui-arm64
 
       - name: Package [win]
         run: |
@@ -104,6 +106,10 @@ jobs:
           zip ../N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_win-x64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.exe
           cd ../artifact-arm64
           zip ../N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.exe
+          cd ../artifact-gui-x64
+          zip ../N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-x64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.GUI.exe
+          cd ../artifact-gui-arm64
+          zip ../N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.GUI.exe
 
       - name: Upload Artifact [win-x64]
         uses: actions/upload-artifact@v4
@@ -116,6 +122,18 @@ jobs:
         with:
           name: win-arm64
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip
+
+      - name: Upload Artifact [win-x64-gui]
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-x64-gui
+          path: N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-x64_${{ needs.set-date.outputs.date }}.zip
+
+      - name: Upload Artifact [win-arm64-gui]
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-arm64-gui
+          path: N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip
 
   build-android-bionic-x64-arm64:
     runs-on: windows-latest
