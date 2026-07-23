@@ -1,0 +1,110 @@
+name: Build GUI
+
+on:
+  workflow_dispatch:
+    inputs:
+      doRelease:
+        description: 'Publish new release'
+        type: boolean
+        default: false
+        required: false
+      tag:
+        type: string
+        description: 'Release version tag (e.g. v0.6.0-gui)'
+        required: true
+      ref:
+        type: string
+        description: 'Git ref from which to release'
+        required: true
+        default: 'main'
+
+env:
+  DOTNET_SDK_VERSION: "10.0.300"
+
+jobs:
+  set-date:
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.get_date.outputs.date }}
+      tag: ${{ steps.format_tag.outputs.tag }}
+    steps:
+      - name: Get Date in UTC+8
+        id: get_date
+        run: |
+          DATE=$(date -u -d '8 hours' +'%Y%m%d')
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Determine Tag
+        id: format_tag
+        run: |
+          if [ "${{ github.event.inputs.doRelease }}" == "true" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="actions-gui-$GITHUB_RUN_ID"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+  build-gui-win-x64-arm64:
+    runs-on: windows-latest
+    needs: set-date
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: Install zip
+        run: choco install zip --no-progress --yes
+
+      - name: Set up dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Build GUI win-x64
+        run: dotnet publish src/N_m3u8DL-RE.GUI -r win-x64 -c Release -o artifact-gui-x64 --self-contained true
+
+      - name: Build GUI win-arm64
+        run: dotnet publish src/N_m3u8DL-RE.GUI -r win-arm64 -c Release -o artifact-gui-arm64 --self-contained true
+
+      - name: Package [win]
+        run: |
+          cd artifact-gui-x64
+          zip ../N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-x64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.GUI.exe
+          cd ../artifact-gui-arm64
+          zip ../N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip N_m3u8DL-RE.GUI.exe
+
+      - name: Upload Artifact [win-x64-gui]
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-x64-gui
+          path: N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-x64_${{ needs.set-date.outputs.date }}.zip
+
+      - name: Upload Artifact [win-arm64-gui]
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-arm64-gui
+          path: N_m3u8DL-RE-GUI_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip
+
+  create_release:
+    name: Create release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: ${{ github.event.inputs.doRelease == 'true' }}
+    needs: [set-date, build-gui-win-x64-arm64]
+
+    steps:
+      - name: Fetch artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.event.inputs.tag }}
+          name: N_m3u8DL-RE-GUI_${{ github.event.inputs.tag }}
+          artifacts: "win-x64-gui/*,win-arm64-gui/*"
+          draft: false
+          allowUpdates: true
+          generateReleaseNotes: true
+          discussionCategory: 'Announcements'
